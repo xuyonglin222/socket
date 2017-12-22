@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Websocket</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script  src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+    <script src="js/jquery-3.2.1.js"></script>
+</head>
+<body>
+<div class="container">
+    <div class="name">
+        <h3>一键式无线信息传输系统</h3>
+    </div>
+    <div class="tab-wraper">
+        <table class="table table-bordered" id="table">
+            <tr>
+            <td>#</td>
+            <td>请求ip地址</td>
+            <td>请求内容</td>
+            <td>是否接受帮助</td>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td>12客房</td>
+                <td>请求换药</td>
+                <td><button type="button" class="btn btn-primary">接受</button></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>12客房</td>
+                <td>请求换药</td>
+                <td><button type="button" class="btn btn-primary">接受</button></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>12客房</td>
+                <td>请求换药</td>
+                <td><button type="button" class="btn btn-primary">接受</button></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>12客房</td>
+                <td>请求换药</td>
+                <td><button type="button" class="btn btn-primary">接受</button></td>
+            </tr>
+        </table>
+    </div>
+</div>
+    <script type="text/javascript">
+        var socket=io.connect('http://localhost:8012');
+        var sendTxt=false;
+        var msgObj={};
+        function show(msg){
+            $('#table').append($(`<tr><td>${msg.num}</td><td>${msg.ip}</td><td>${msg.msg}</td><td><button type="button" class="btn btn-primary">接受</button></td></tr>`))
+        }
+        socket.on('recvTxt',function(data){
+            msgObj.num= $("#table  tr").length;
+            msgObj.ip = data.ip;
+            msgObj.msg =data.msg;
+             msgObj={
+                num:'2',
+                ip:'333',
+                msg:'333'
+            }
+            show(msgObj);
+        })
+        $("#table .btn").on('click',function(){
+            sendTxt=true;
+            socket.emit('sendTxt',sendTxt);
+            $(this).attr('disabled','disabled').html('已接受').addClass('btn-default');
+        });
+
+    </script>
+</body>
+</html>
